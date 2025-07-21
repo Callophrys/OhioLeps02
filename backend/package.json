@@ -14,11 +14,13 @@
   "license": "ISC",
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
+    "better-sqlite3": "^12.2.0",
     "dotenv": "^17.2.0",
-    "express": "^5.1.0",
-    "sqlite3": "^5.1.7"
+    "express": "^5.1.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "node-gyp": "^11.2.0",
+    "nodemon": "^3.1.10",
+    "windows-build-tools": "^5.2.2"
   }
 }

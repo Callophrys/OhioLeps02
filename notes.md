@@ -1,33 +1,32 @@
-mkdir OhioLeps02 │ D:\Dev │ ... │
-cd OhioLeps02 │ D:\Dev │ ... │
-pnpm create svelte@latest frontend │ D:\Dev\OhioLeps02 │ ... │
-pnpm exec create svelte@latest frontend │ D:\Dev\OhioLeps02 │ ... │
-pnpm help │ D:\Dev\OhioLeps02 │ ... │
-npx create svelte@latest frontend │ D:\Dev\OhioLeps02 │ ... │
-pnpm create svelte@latest frontend │ D:\Dev\OhioLeps02 │ ... │
-pnpm exec sv create svelte@latest frontend │ D:\Dev\OhioLeps02 │ ... │
-npx sv create svelte@latest frontend │ D:\Dev\OhioLeps02 │ ... │
-npx sv create frontend │ D:\Dev\OhioLeps02 │ ... │
-cd frontend\ │ D:\Dev\OhioLeps02 │ ... │
+mkdir OhioLeps02
+cd OhioLeps02
+pnpm create svelte@latest frontend
+pnpm exec create svelte@latest frontend
+pnpm help
+npx create svelte@latest frontend
+pnpm create svelte@latest frontend
+pnpm exec sv create svelte@latest frontend
+npx sv create svelte@latest frontend
+npx sv create frontend
+cd frontend
 git init; git add -A; git commit -m "Initial commit" │ D:\Dev\OhioLeps02\frontend │ ... │
-pnpm install │ D:\Dev\OhioLeps02\frontend │ ... │
-pnpm install @capacitor/core @capacitor/cli │ D:\Dev\OhioLeps02\frontend │ ... │
-npx cap init │ D:\Dev\OhioLeps02\frontend │ ... │
-npx cap init │ D:\Dev\OhioLeps02\frontend │ ... │
-npx cap add android │ D:\Dev\OhioLeps02\frontend │ ... │
-npx cap add ios │ D:\Dev\OhioLeps02\frontend │ ... │
-npm install @capacitor/android @capacitor/ios │ D:\Dev\OhioLeps02\frontend │ ... │
-npm install @capacitor/android │ D:\Dev\OhioLeps02\frontend │ ... │
-pnpm exec cap add ios │ D:\Dev\OhioLeps02\frontend │ ... │
-pnpm install @capacitor/android │ D:\Dev\OhioLeps02\frontend │ ... │
-pnpm install @capacitor/ios │ D:\Dev\OhioLeps02\frontend │ ... │
-pnpm exec cap add @capacitor/ios │ D:\Dev\OhioLeps02\frontend │ ... │
-pnpm exec cap add @capacitor/android │ D:\Dev\OhioLeps02\frontend │ ... │
-pnpm add @capacitor-community/speech-recognition @capacitor-community/sqlite │ D:\Dev\OhioLeps02\frontend │ ... │
-mkdir backend │ D:\Dev\OhioLeps02 │ ... │
-cd backend\ │ D:\Dev\OhioLeps02 │ ... │
-pnpm install express sqlite3 dotenv │ D:\Dev\OhioLeps02\backend │ ... │
-pnpm install nodemon -D │ D:\Dev\OhioLeps02\backend │ ... │
+pnpm install
+pnpm install @capacitor/core @capacitor/cli
+npx cap init
+npx cap add android
+npx cap add ios
+npm install @capacitor/android @capacitor/ios
+npm install @capacitor/android
+pnpm exec cap add ios
+pnpm install @capacitor/android
+pnpm install @capacitor/ios
+pnpm exec cap add @capacitor/ios
+pnpm exec cap add @capacitor/android
+pnpm add @capacitor-community/speech-recognition @capacitor-community/sqlite
+mkdir backend
+cd backend
+pnpm install express sqlite3 dotenv
+pnpm install nodemon -D
 cd .. │ D:\Dev\OhioLeps02\backend │ ... │
 cd OhioLeps02\ │ D:\Dev │ ... │
 cd frontend\ │ D:\Dev\OhioLeps02 │ ... │
