@@ -209,3 +209,39 @@ pnpm jeep-sqlite
 -- to make jeep available to app.html
 pnpm install vite-plugin-static-copy --save-dev
 
+⚡️ You’re ready!
+
+Next steps you can ask me for:
+
+    Add user auth to link synced records to a user.
+
+    Add file/image/audio storage with Capacitor Filesystem.
+
+    Make your Express API production-ready.
+
+    Write Playwright or Cypress tests for your Svelte UI.
+
+If you want, I can generate:
+
+    A full Dockerfile for the Node API.
+
+    A final folder structure.
+
+    Or an exported .apk / .ipa build plan.
+
+Just say: give me the next part! 🚀
+
+In the frontend:
+npx cap add ios
+npx cap add android
+npx cap sync
+
+capacitor.config.ts:
+currently webDir says dist
+webDir must match your built output folder.
+    For SvelteKit → build if you run vite build or svelte-kit build.
+
+Random:
+Consider renaming backend to api
+Consider renaming frontend to 'fieldapp'
+
