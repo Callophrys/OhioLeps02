@@ -60,6 +60,7 @@ declare module '$env/static/private' {
 	export const NODE_PATH: string;
 	export const npm_command: string;
 	export const npm_config_frozen_lockfile: string;
+	export const npm_config_python: string;
 	export const npm_config_registry: string;
 	export const npm_config_user_agent: string;
 	export const npm_config_verify_deps_before_run: string;
@@ -187,6 +188,7 @@ declare module '$env/dynamic/private' {
 		NODE_PATH: string;
 		npm_command: string;
 		npm_config_frozen_lockfile: string;
+		npm_config_python: string;
 		npm_config_registry: string;
 		npm_config_user_agent: string;
 		npm_config_verify_deps_before_run: string;
