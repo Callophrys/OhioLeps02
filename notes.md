@@ -245,3 +245,19 @@ Random:
 Consider renaming backend to api
 Consider renaming frontend to 'fieldapp'
 
+Build flow reminder
+
+When you’re ready to ship:
+
+# 1️⃣ build your web assets
+pnpm build  # or npm run build
+
+# 2️⃣ copy them to native
+npx cap copy
+
+# 3️⃣ sync plugins and config
+npx cap sync
+
+# 4️⃣ open native project in Xcode or Android Studio
+npx cap open ios
+npx cap open android
