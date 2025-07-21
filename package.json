@@ -1,0 +1,11 @@
+{
+  "name": "OhioLeps02",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter frontend dev\" \"pnpm --filter backend dev\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
