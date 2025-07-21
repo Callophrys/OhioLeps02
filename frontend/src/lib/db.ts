@@ -9,18 +9,43 @@ const sqliteConnection = new SQLiteConnection(CapacitorSQLite);
 const dbName = 'observations';
 
 export async function getDb(): Promise<SQLiteDBConnection> {
-  const db: SQLiteDBConnection = await sqliteConnection.createConnection(dbName, false, 'no-encryption', 1, true);
+  console.log('getDb()');
+  const platform = Capacitor.getPlatform();
+  console.log('getDb() - platform:', platform);
+  if (platform === 'web') {
+    // ⚡ IMPORTANT: initialize the web store
+    const jeepSqlite = customElements.get('jeep-sqlite');
+    if (!jeepSqlite) {
+      customElements.define(
+        'jeep-sqlite',
+        await import('jeep-sqlite').then(m => m.defineCustomElement()));
+    }
+    await sqliteConnection.initWebStore();
+  }
+
+  const db: SQLiteDBConnection = await sqliteConnection.createConnection(
+    dbName,
+    false,
+    'no-encryption',
+    1,
+    true);
   await db.open();
   return db;
 }
 
 export async function getDbReadOnly(): Promise<SQLiteDBConnection> {
-  const db: SQLiteDBConnection = await sqliteConnection.createConnection(dbName, false, 'no-encryption', 1, false);
+  const db: SQLiteDBConnection = await sqliteConnection.createConnection(
+    dbName,
+    false,
+    'no-encryption',
+    1,
+    false);
   await db.open();
   return db;
 }
 
 export async function initDb(): Promise<void> {
+  console.log('initDb()');
   const db: SQLiteDBConnection = await getDb();
   await db.execute(`
     CREATE TABLE IF NOT EXISTS records (

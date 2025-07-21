@@ -49,3 +49,4 @@
 <p>{recognizedText}</p>
 <button onclick={save}>Save Record</button>
 <button onclick={sync}>Sync</button>
+
