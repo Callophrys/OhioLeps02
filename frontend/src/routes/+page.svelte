@@ -6,13 +6,17 @@
   let recognizedText = '';
 
   onMount(async () => {
-    console.log("onMount");
+    console.log("onMount - initDb");
     await initDb();
+
+    console.log("onMount - addRecord");
+    await addRecord("test 1", 33);
   });
 
   async function handleVoice() {
+    console.log("handleVoice");
     await startListening((result) => {
-      console.log("handleVoice");
+      console.log("handleVoice - startListening");
       recognizedText = result;
     });
   }
@@ -26,6 +30,7 @@
   async function sync() {
     console.log("sync");
     const unsynced = await getUnsynced();
+
     console.log('Upload this to your API:', unsynced);
     // TODO: POST to your Node.js API here, then mark as synced
   }

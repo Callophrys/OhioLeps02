@@ -1,3 +1,10 @@
 packages:
-  - 'frontend'
-  - 'backend'
+  - frontend
+  - backend
+
+ignoredBuiltDependencies:
+  - esbuild
+  - windows-build-tools
+
+onlyBuiltDependencies:
+  - better-sqlite3
