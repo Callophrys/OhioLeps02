@@ -261,3 +261,7 @@ npx cap sync
 # 4️⃣ open native project in Xcode or Android Studio
 npx cap open ios
 npx cap open android
+
+
+pnpm add -D tailwindcss
+npx tailwind init tailwind.config.cjs -p

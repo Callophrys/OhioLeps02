@@ -8,9 +8,13 @@
     deleteRecord,
     updateRecord
   } from '$lib/db';
+  import { startListening } from '$lib/voice';
+  import RecordsManager from '$lib/components/RecordsManager.svelte';
 
   let newText = '';
   let newCount = 1;
+
+  let recognizedText = '';
 
   // Initialize DB and load records on mount
   onMount(async () => {
@@ -48,48 +52,35 @@
       await refresh();
     }
   }
+
+  async function handleVoice() {
+    console.log("handleVoice");
+    await startListening((result) => {
+      console.log("handleVoice - startListening");
+      recognizedText = result;
+    });
+  }
 </script>
 
-<style>
-  form {
-    margin-bottom: 1em;
-  }
-  input, button {
-    margin-right: 0.5em;
-  }
-  .record {
-    border-bottom: 1px solid #ddd;
-    padding: 0.5em 0;
-  }
-</style>
+<div class="max-w-lg mx-auto p-4">
+  <button
+    on:click={handleVoice}
+    class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-2"
+  >
+    Start Voice
+  </button>
+  <p class="mb-4">Latest recognized: {recognizedText}</p>
 
-<h2>Add New Record</h2>
+  <RecordsManager title="Your Observations" />
 
-<form on:submit|preventDefault={handleAdd}>
-  <input
-    type="text"
-    placeholder="Your text here"
-    bind:value={newText}
-  />
-  <input
-    type="number"
-    min="1"
-    bind:value={newCount}
-  />
-  <button type="submit">Add</button>
-</form>
+  <button
+    on:click={sync}
+    class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 mt-4"
+  >
+    Sync to API
+  </button>
 
-<h2>All Records</h2>
-
-{#if $records.length === 0}
-  <p>No records yet.</p>
-{/if}
-
-{#each $records as record (record.id)}
-  <div class="record">
-    <strong>{record.text}</strong> (Count: {record.count}) [Synced: {record.synced ? '✅' : '❌'}]
-    <button on:click={() => handleEdit(record.id, record.text)}>Edit</button>
-    <button on:click={() => handleDelete(record.id)}>Delete</button>
-  </div>
-{/each}
-
+  <button on:click={handleVoice}>Start Recording</button>
+  <p>Latest recognized: {recognizedText}</p>
+  
+</div>
