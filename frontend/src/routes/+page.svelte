@@ -1,7 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { initDb, addRecord, getUnsynced } from '$lib/db';
+  import { records } from '$lib/store';
+  import { initDb, getAll, addRecord, deleteRecord, updateRecord, getUnsynced, markAsSynced } from '$lib/db';
   import { startListening } from '$lib/voice';
+  import { syncRecords } from '$lib/api';
 
   let recognizedText = '';
 
@@ -11,15 +13,9 @@
 
     console.log("onMount - addRecord");
     await addRecord("test 1", 33);
-  });
 
-  async function handleVoice() {
-    console.log("handleVoice");
-    await startListening((result) => {
-      console.log("handleVoice - startListening");
-      recognizedText = result;
-    });
-  }
+    await refresh();
+  });
 
   async function save() {
     console.log("save");
@@ -30,23 +26,68 @@
   async function sync() {
     console.log("sync");
     const unsynced = await getUnsynced();
+    console.log('Would upload:', unsynced);
 
-    console.log('Upload this to your API:', unsynced);
-    // TODO: POST to your Node.js API here, then mark as synced
+    if (unsynced.length === 0) {
+      alert('Nothing to sync!');
+      return;
+    }
+
+    const ok = await syncRecords(unsynced);
+    if (ok) {
+      await markAsSynced(unsynced.map(r => r.id));
+      await refresh();
+      alert('Sync successful!');
+    } else {
+      alert('Sync failed!');
+    }
   }
 
-  // const unsynced = await getUnsynced();
-  // await fetch('http://your-server-url/api/sync', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify({ records: unsynced })
-  // });
-  // // Then markAsSynced(unsynced.map(r => r.id));
+  async function refresh() {
+    const all = await getAll();
+    records.set(all);
+  }
 
+  async function handleVoice() {
+    console.log("handleVoice");
+    await startListening((result) => {
+      console.log("handleVoice - startListening");
+      recognizedText = result;
+    });
+  }
+
+  async function handleDelete(id) {
+    if (confirm('Delete this record?')) {
+      await deleteRecord(id);
+      await refresh();
+    }
+  }
+
+  async function handleEdit(id) {
+    const newText = prompt('New text?');
+    if (newText) {
+      await updateRecord(id, newText);
+      await refresh();
+    }
+  }
 </script>
 
-<button onclick={handleVoice}>Start Recording</button>
-<p>{recognizedText}</p>
-<button onclick={save}>Save Record</button>
-<button onclick={sync}>Sync</button>
+<button on:click={handleVoice}>Start Recording</button>
+<p>Latest recognized: {recognizedText}</p>
+
+<h3>Records:</h3>
+
+{#if $records.length === 0}
+  <p>No records yet.</p>
+{:else}
+  {#each $records as record (record.id)}
+    <div>
+      <strong>{record.text}</strong> ({record.count}) [Synced: {record.synced ? '✅' : '❌'}]
+      <button on:click={() => handleEdit(record.id)}>Edit</button>
+      <button on:click={() => handleDelete(record.id)}>Delete</button>
+    </div>
+  {/each}
+{/if}
+
+<button on:click={sync}>Sync to API</button>
 

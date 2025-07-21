@@ -1,6 +1,12 @@
 // src/lib/voice.ts
+// For autosave
+//
+
+import type { ObservationRecord } from '$lib/types';
 import { SpeechRecognition } from '@capacitor-community/speech-recognition';
 import type { PermissionStatus } from '@capacitor-community/speech-recognition';
+import { addRecord, getAll } from '$lib/db';
+import { records } from '$lib/store';
 
 export async function ensureVoicePermission(): Promise<void> {
   const permission: PermissionStatus = await SpeechRecognition.checkPermissions();
@@ -18,11 +24,16 @@ export async function startListening(onResult: (result: string) => void): Promis
     partialResults: false
   });
 
-  SpeechRecognition.addListener( 'partialResults', (result: any): void => {
+  SpeechRecognition.addListener( 'partialResults', async (result: any): Promise<void> => {
     if (result.matches && result.matches.length > 0) {
-      console.log("I work!", result.matches);
-      onResult(result.matches[0]);
-      // Save to local SQLite here - maybe (old way)?
+      const text = result.matches[0];
+      console.log("Voice match:", text);
+      onResult(text);
+
+      // ✅ Auto-save!
+      await addRecord(text, 1);
+      const all = await getAll();
+      records.set(all);
     }
   });
 }

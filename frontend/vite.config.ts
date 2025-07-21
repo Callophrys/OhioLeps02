@@ -10,6 +10,16 @@ export default defineConfig({
 			  {
 				  src: 'node_modules/jeep-sqlite/dist/jeep-sqlite/jeep-sqlite.esm.js',
 					dest: 'vendor'
-					}]}),
+				},
+			  {
+				  src: 'node_modules/jeep-sqlite/dist/jeep-sqlite/p-2873ae8c.js',
+					dest: 'vendor'
+				},
+			  {
+				  src: 'node_modules/jeep-sqlite/dist/jeep-sqlite/p-e1255160.js',
+					dest: 'vendor'
+				}
+			]
+		}),
 	]
 });

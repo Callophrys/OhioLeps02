@@ -1,4 +1,7 @@
 // src/lib/db.ts
+//
+
+import type { ObservationRecord } from '$lib/types';
 import type { DBSQLiteValues } from '@capacitor-community/sqlite';
 import { CapacitorSQLite, SQLiteConnection, SQLiteDBConnection } from '@capacitor-community/sqlite';
 
@@ -18,7 +21,8 @@ export async function getDb(): Promise<SQLiteDBConnection> {
     if (!jeepSqlite) {
       customElements.define(
         'jeep-sqlite',
-        await import('jeep-sqlite').then(m => m.defineCustomElement()));
+        await import('jeep-sqlite').then(m => m.defineCustomElement())
+      );
     }
     await sqliteConnection.initWebStore();
   }
@@ -68,7 +72,26 @@ export async function addRecord(text: string, count: number): Promise<void> {
   await sqliteConnection.closeConnection(dbName, false);
 }
 
-export async function getUnsynced(): Promise<any[]> {
+export async function getAll(): Promise<ObservationRecord[]> {
+  const db: SQLiteDBConnection = await getDbReadOnly();
+  const res = await db.query('SELECT * FROM records;');
+  await sqliteConnection.closeConnection(dbName, true);
+  return res.values ?? [];
+}
+
+export async function deleteRecord(id: number): Promise<void> {
+  const db: SQLiteDBConnection = await getDb();
+  await db.run('DELETE FROM records WHERE id = ?', [id]);
+  await sqliteConnection.closeConnection(dbName, false);
+}
+
+export async function updateRecord(id: number, newText: string): Promise<void> {
+  const db: SQLiteDBConnection = await getDb();
+  await db.run('UPDATE records SET text = ? WHERE id = ?', [newText, id]);
+  await sqliteConnection.closeConnection(dbName, false);
+}
+
+export async function getUnsynced(): Promise<ObservationRecord[]> {
   const db: SQLiteDBConnection = await getDbReadOnly();
   const res: DBSQLiteValues = await db.query('SELECT * FROM records WHERE synced = 0;');
   await sqliteConnection.closeConnection(dbName, true);
