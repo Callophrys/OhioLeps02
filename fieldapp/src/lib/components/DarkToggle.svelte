@@ -1,10 +1,10 @@
-<script lang="ts">
+<script lang='ts'>
   // src/lib/components/DarkToggle.svelte
 
-  import type { Snippet } from "svelte";
-  import { browser } from "$app/environment";
-  import { onMount } from "svelte";
-  import {cButtonBaseClasses, cButtonLightClasses, cButtonDarkClasses } from "$lib/styles/standard";
+  import type { Snippet } from 'svelte';
+  import { browser } from '$app/environment';
+  import { onMount } from 'svelte';
+  import {cButtonBaseClasses, cButtonLightClasses, cButtonDarkClasses } from '$lib/styles/standard';
 
   let {
     baseClasses = '',
@@ -19,7 +19,7 @@
   } = $props();
 
   const prefixedDark = (x: string) =>
-    x.split(' ').map((x) => (x.includes("dark:") ? '' : 'dark:') + x).join(' ');
+    x.split(' ').map((x) => (x.includes('dark:') ? '' : 'dark:') + x).join(' ');
 
   const classes = $derived(
     // Concat order matters so user classes can override
@@ -36,17 +36,17 @@
   let checkState = $state(false);
 
   onMount(() => {
-    const mode = localStorage.getItem("data-mode") || "light";
-    document.documentElement.setAttribute("data-mode", mode);
-    checkState = mode === "dark";
+    const mode = localStorage.getItem('data-mode') || 'light';
+    document.documentElement.setAttribute('data-mode', mode);
+    checkState = mode === 'dark';
   });
 
   function toggleThemeMode(e: any) {
     checkState = !checkState;
 
-    const mode = checkState ? "dark" : "light";
-    document.documentElement.setAttribute("data-mode", mode);
-    localStorage.setItem("data-mode", mode);
+    const mode = checkState ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-mode', mode);
+    localStorage.setItem('data-mode', mode);
   }
 
 </script>

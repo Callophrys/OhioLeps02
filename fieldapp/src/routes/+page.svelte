@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { records } from '$lib/store';
-  import { initDb, getAll, addRecord, deleteRecord, updateRecord, getUnsynced, markAsSynced } from '$lib/db';
+  import { getAll, addRecord, deleteRecord, updateRecord, getUnsynced, markAsSynced } from '$lib/db';
   import { startListening } from '$lib/voice';
   import { syncRecords } from '$lib/api';
   import DarkToggle from '$lib/components/DarkToggle.svelte';
@@ -9,9 +9,6 @@
   let recognizedText = '';
 
   onMount(async () => {
-    console.log("onMount - initDb");
-    await initDb();
-
     console.log("onMount - addRecord");
     await addRecord("test 1", 33);
 

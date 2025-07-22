@@ -11,3 +11,5 @@ vite.config.ts.timestamp-*
 *.accdb
 *.laccdb
 /.vscode
+*/static/assets
+*/static/vendor

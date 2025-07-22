@@ -2,29 +2,26 @@
   import { onMount } from 'svelte';
   import { records } from '$lib/store';
   import {
-    initDb,
     getAll,
     addRecord,
     deleteRecord,
     updateRecord
   } from '$lib/db';
 
-  export let title = 'Manage Your Records';
+  let { title = 'Manage Your Records' } : { title: string; } = $props();
 
-  let newText = '';
-  let newCount = 1;
+  let newText = $state('');
+  let newCount = $state(1);
 
-  onMount(async () => {
-    await initDb();
-    await refresh();
-  });
+  onMount(async () => await refresh());
 
   async function refresh() {
     const all = await getAll();
     records.set(all);
   }
 
-  async function handleAdd() {
+  async function handleAdd(e: any) {
+    e.preventDefault();
     if (!newText.trim()) {
       alert('Please enter some text!');
       return;
@@ -54,7 +51,7 @@
 <div class="max-w-lg mx-auto p-4">
   <h2 class="text-2xl font-bold mb-4">{title}</h2>
 
-  <form on:submit|preventDefault={handleAdd} class="flex flex-col gap-2 mb-6">
+  <form onsubmit={handleAdd} class="flex flex-col gap-2 mb-6">
     <input
       type="text"
       placeholder="Record text"
@@ -90,13 +87,13 @@
         </div>
         <div class="flex gap-2">
           <button
-            on:click={() => handleEdit(record.id, record.text)}
+            onclick={() => handleEdit(record.id, record.text)}
             class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
           >
             Edit
           </button>
           <button
-            on:click={() => handleDelete(record.id)}
+            onclick={() => handleDelete(record.id)}
             class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
           >
             Delete

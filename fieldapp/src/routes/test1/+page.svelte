@@ -2,7 +2,6 @@
   import { onMount } from 'svelte';
   import { records } from '$lib/store';
   import {
-    initDb,
     getAll,
     addRecord,
     deleteRecord,
@@ -19,7 +18,6 @@
 
   // Initialize DB and load records on mount
   onMount(async () => {
-    await initDb();
     await refresh();
   });
 
@@ -65,23 +63,23 @@
 
 <div class="max-w-lg mx-auto p-4">
   <button
-    on:click={handleVoice}
+    onclick={handleVoice}
     class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-2"
   >
     Start Voice
   </button>
   <p class="mb-4">Latest recognized: {recognizedText}</p>
 
-  <RecordsManager title="Your Observations" />
+  <RecordsManager title="Your Field Observations" />
 
+    <!-- onclick={sync} -->
   <button
-    on:click={sync}
     class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 mt-4"
   >
     Sync to API
   </button>
 
-  <button on:click={handleVoice}>Start Recording</button>
+  <button onclick={handleVoice}>Start Recording</button>
   <p>Latest recognized: {recognizedText}</p>
   
 </div>
