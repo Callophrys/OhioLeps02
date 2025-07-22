@@ -9,6 +9,7 @@
     updateRecord
   } from '$lib/db';
   import { startListening } from '$lib/voice';
+  import DarkToggle from '$lib/components/DarkToggle.svelte';
   import RecordsManager from '$lib/components/RecordsManager.svelte';
 
   let newText = '';
@@ -84,3 +85,5 @@
   <p>Latest recognized: {recognizedText}</p>
   
 </div>
+
+<DarkToggle />

@@ -4,6 +4,7 @@
   import { initDb, getAll, addRecord, deleteRecord, updateRecord, getUnsynced, markAsSynced } from '$lib/db';
   import { startListening } from '$lib/voice';
   import { syncRecords } from '$lib/api';
+  import DarkToggle from '$lib/components/DarkToggle.svelte';
 
   let recognizedText = '';
 
@@ -91,3 +92,9 @@
 
 <button on:click={sync}>Sync to API</button>
 
+<div class="border p-4 rounded shadow flex justify-between items-center dark:bg-gray-800 dark:text-white">
+  <!-- record content -->
+  stuff here
+</div>
+
+<DarkToggle/>
