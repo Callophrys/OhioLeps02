@@ -1,5 +1,6 @@
-// api/db.js
+// api/db.ts
 import Database from 'better-sqlite3';
+import type { RecordInput, RecordRow } from './interfaces';
 
 const db = new Database('./data.db');
 
@@ -16,7 +17,7 @@ export function initDb() {
 }
 
 // Insert a record
-export function insertRecord({ text, count }) {
+export function insertRecord({ text, count }: RecordInput) {
   const stmt = db.prepare(
     'INSERT INTO records (text, count, syncedAt) VALUES (?, ?, ?)'
   );
@@ -24,7 +25,6 @@ export function insertRecord({ text, count }) {
 }
 
 // Get all records
-export function getRecords() {
-  return db.prepare('SELECT * FROM records').all();
+export function getRecords(): RecordRow[] {
+  return db.prepare('SELECT * FROM records').all() as RecordRow[];
 }
-

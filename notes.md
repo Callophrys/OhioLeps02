@@ -265,3 +265,33 @@ npx cap open android
 
 pnpm add -D tailwindcss
 npx tailwind init tailwind.config.cjs -p
+
+npm install @capacitor/camera @capacitor/filesystem @capacitor/network
+npx cap sync
+
+Syncing your web code to your Capacitor project
+
+Once your web code has been built for distribution, you will need to push your web code to the web native Capacitor application. To do this, you can use the Capacitor CLI to "sync" your web code and install/update the required native dependencies.
+
+To sync your project, run:
+
+npx cap sync
+
+Testing your Capacitor app
+
+Once you've synced over your web bundle to your native project, it is time to test your application on a mobile device. There are a few different ways to do this, but the easiest way is to use the built in Capacitor CLI commands.
+
+To run a debug build of your Capacitor app on an iOS device, you can run:
+
+npx cap run ios
+
+Similarly, to run a debug build of your Capacitor app on an Android device, you can run:
+
+npx cap run android
+
+
+api/backend
+pnpm install express body-parser
+pnpm install --save-dev typescript ts-node @types/express @types/node
+
+

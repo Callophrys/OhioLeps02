@@ -2,12 +2,12 @@
   "name": "api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "type": "module",
   "scripts": {
-    "build": "node index.js",
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "build": "node index.ts",
+    "start": "node index.ts",
+    "dev": "nodemon index.ts"
   },
   "keywords": [],
   "author": "",
@@ -15,12 +15,18 @@
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
     "better-sqlite3": "^12.2.0",
+    "body-parser": "^2.2.0",
     "dotenv": "^17.2.0",
     "express": "^5.1.0"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.1.0",
     "node-gyp": "^11.2.0",
     "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
     "windows-build-tools": "^5.2.2"
   }
 }
