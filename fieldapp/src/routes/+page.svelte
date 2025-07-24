@@ -1,73 +1,73 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { records } from '$lib/store';
-  import { getAll, addRecord, deleteRecord, updateRecord, getUnsynced, markAsSynced } from '$lib/db';
-  import { startListening } from '$lib/voice';
-  import { syncRecords } from '$lib/api';
-  import DarkToggle from '$lib/components/DarkToggle.svelte';
+import { onMount } from 'svelte';
+import { records } from '$lib/store';
+import { getAll, addRecord, deleteRecord, updateRecord, getUnsynced, markAsSynced } from '$lib/db';
+import { startListening } from '$lib/voice';
+import { syncRecords } from '$lib/api';
+import DarkToggle from '$lib/components/DarkToggle.svelte';
 
-  let recognizedText = '';
+let recognizedText = '';
 
-  onMount(async () => {
-    console.log("onMount - addRecord");
-    await addRecord("test 1", 33);
+onMount(async () => {
+  console.log("onMount - addRecord");
+  await addRecord("test 1", 33);
 
+  await refresh();
+});
+
+async function save() {
+  console.log("save");
+  await addRecord(recognizedText, 1);
+  alert('Saved locally!');
+}
+
+async function sync() {
+  console.log("sync");
+  const unsynced = await getUnsynced();
+  console.log('Would upload:', unsynced);
+
+  if (unsynced.length === 0) {
+    alert('Nothing to sync!');
+    return;
+  }
+
+  const ok = await syncRecords(unsynced);
+  if (ok) {
+    await markAsSynced(unsynced.map(r => r.id));
     await refresh();
+    alert('Sync successful!');
+  } else {
+    alert('Sync failed!');
+  }
+}
+
+async function refresh() {
+  const all = await getAll();
+  records.set(all);
+}
+
+async function handleVoice() {
+  console.log("handleVoice");
+  await startListening((result) => {
+    console.log("handleVoice - startListening");
+    recognizedText = result;
   });
+}
 
-  async function save() {
-    console.log("save");
-    await addRecord(recognizedText, 1);
-    alert('Saved locally!');
+async function handleDelete(id) {
+  if (confirm('Delete this record?')) {
+    await deleteRecord(id);
+    await refresh();
   }
+}
 
-  async function sync() {
-    console.log("sync");
-    const unsynced = await getUnsynced();
-    console.log('Would upload:', unsynced);
-
-    if (unsynced.length === 0) {
-      alert('Nothing to sync!');
-      return;
-    }
-
-    const ok = await syncRecords(unsynced);
-    if (ok) {
-      await markAsSynced(unsynced.map(r => r.id));
-      await refresh();
-      alert('Sync successful!');
-    } else {
-      alert('Sync failed!');
-    }
+async function handleEdit(id) {
+  const newText = prompt('New text?');
+  if (newText) {
+    await updateRecord(id, newText);
+    await refresh();
   }
-
-  async function refresh() {
-    const all = await getAll();
-    records.set(all);
-  }
-
-  async function handleVoice() {
-    console.log("handleVoice");
-    await startListening((result) => {
-      console.log("handleVoice - startListening");
-      recognizedText = result;
-    });
-  }
-
-  async function handleDelete(id) {
-    if (confirm('Delete this record?')) {
-      await deleteRecord(id);
-      await refresh();
-    }
-  }
-
-  async function handleEdit(id) {
-    const newText = prompt('New text?');
-    if (newText) {
-      await updateRecord(id, newText);
-      await refresh();
-    }
-  }
+}
 </script>
 
 <button on:click={handleVoice}>Start Recording</button>
