@@ -4,10 +4,19 @@
 		<meta charset="utf-8" />
     <link rel="icon" href="%sveltekit.assets%/logo_med_transp.gif" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		%sveltekit.head%
 		<!-- Following is for web fallback. E.g. web-only, not iOS and not Android -->
 		<!-- <script type="module" src="https://cdn.jsdelivr.net/npm/jeep-sqlite/dist/jeep-sqlite/jeep-sqlite.esm.js"></script> -->
 		<script type="module" src="/vendor/jeep-sqlite.esm.js"></script>
+		<script>
+			document.documentElement.setAttribute(
+				'data-mode',
+				localStorage
+					.getItem('theme') === 'dark'
+					|| ( !('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+					? 'dark' : 'light'
+			);
+		</script>
+		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover" class="bg-slate-400 dark:bg-slate-800 dark:text-white">
 		<jeep-sqlite></jeep-sqlite>

@@ -8,6 +8,7 @@ import type { RecordInput } from '../interfaces';
 const router = Router();
 
 router.post('/', (req, res) => {
+  console.log("syncing...");
   const { records } = req.body;
 
   if (!records || !Array.isArray(records)) {

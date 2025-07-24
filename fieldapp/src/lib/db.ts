@@ -42,6 +42,7 @@ export async function addRecord(text: string, count: number): Promise<void> {
 }
 
 export async function getAll(): Promise<ObservationRecord[]> {
+  console.log("getAll()");
   const db: SQLiteDBConnection = await getDbReadOnly();
   const res = await db.query('SELECT * FROM records;');
   await sqliteConnection.closeConnection(dbName, true);
@@ -113,11 +114,17 @@ async function getDbInternal(readOnly: boolean): Promise<SQLiteDBConnection> {
   return db;
 }
 
+let setupWebDbBeenRun = false;
 /**
  * Safe setup: ensure jeep-sqlite element is defined AND mounted,
  * then init the web store.
  */
 async function setupWebDb() {
+  if (setupWebDbBeenRun) {
+    console.log("setupWebDb() has already been run. Returning.");
+    return;
+  }
+  setupWebDbBeenRun = true;
   const platform = Capacitor.getPlatform();
   if (platform !== 'web') return; // Native? Skip
 
@@ -137,7 +144,8 @@ async function setupWebDb() {
   }
 
   // Explicit folder path.
-  (jeepElement as any).wasmPath = 'assets';
+  // (jeepElement as any).wasmPath = 'assets';
+  jeepElement.setAttribute('wasmpath', 'assets');
 
   // 3️⃣ ✅ Wait for the jeep-sqlite to be truly ready
   await new Promise<void>((resolve) => {

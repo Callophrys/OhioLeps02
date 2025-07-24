@@ -17,17 +17,19 @@
 
   let recognizedText = '';
 
-  // Initialize DB and load records on mount
+  // Initialize DB and load records on moun
   onMount(async () => {
     await refresh();
   });
 
   async function refresh() {
+    console.log("refresh()");
     const all = await getAll();
     records.set(all);
   }
 
   async function handleAdd() {
+    console.log("handleAdd()");
     if (!newText.trim()) {
       alert('Please enter some text!');
       return;

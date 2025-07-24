@@ -34,6 +34,7 @@
 		"@capacitor/preferences": "^7.0.1",
 		"@tailwindcss/vite": "^4.1.11",
 		"jeep-sqlite": "^2.8.0",
+		"sql.js": "^1.13.0",
 		"tailwindcss": "^4.1.11"
 	}
 }
