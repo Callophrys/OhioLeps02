@@ -1,3 +1,4 @@
+<!-- src/routes/+layout.svelte -->
 <script lang="ts">
   import { loadTheme } from '$lib/theme';
   import { initDb } from '$lib/db';

@@ -2,6 +2,7 @@
 node_modules
 /api/dist
 /api/build
+/api/uploads
 /fieldapp/dist
 /fieldapp/build
 .svelte-kit

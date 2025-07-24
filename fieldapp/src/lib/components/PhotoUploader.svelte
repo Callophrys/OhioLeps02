@@ -1,0 +1,167 @@
+<!-- src/lib/components/PhotoUploader.svelte -->
+<script lang="ts">
+  import { onMount } from 'svelte';
+  import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+  import { Filesystem, Directory } from '@capacitor/filesystem';
+  import { Preferences } from '@capacitor/preferences';
+
+  interface Photo {
+    fileName: string;
+    webviewPath: string;
+  }
+
+  let photos: Photo[] = [];
+
+  // 📌 Load persisted photo metadata on app start
+  onMount(() => {
+    loadPhotosMetadata();
+  });
+
+  async function takePhoto() {
+    const image = await Camera.getPhoto({
+      quality: 80,
+      allowEditing: false,
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Camera,
+    });
+
+    await savePhoto(image);
+  }
+
+  async function pickPhoto() {
+    const image = await Camera.getPhoto({
+      quality: 80,
+      allowEditing: false,
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Photos,
+    });
+
+    await savePhoto(image);
+  }
+
+  async function savePhoto(image: { webPath?: string }) {
+    if (!image.webPath) return;
+
+    // Get the photo data as Blob
+    const response = await fetch(image.webPath);
+    const blob = await response.blob();
+    const base64 = await blobToBase64(blob) as string;
+
+    const fileName = `${new Date().getTime()}.jpeg`;
+
+    // Save the photo to Filesystem (base64)
+    await Filesystem.writeFile({
+      path: fileName,
+      data: base64,
+      directory: Directory.Data,
+    });
+
+    photos = [
+      ...photos,
+      {
+        fileName,
+        webviewPath: image.webPath,
+      }
+    ];
+
+    await savePhotosMetadata();
+  }
+
+  async function removePhoto(fileName: string) {
+    await Filesystem.deleteFile({
+      path: fileName,
+      directory: Directory.Data,
+    });
+
+    photos = photos.filter(p => p.fileName !== fileName);
+    await savePhotosMetadata();
+  }
+
+  async function uploadAll() {
+    for (const photo of photos) {
+      // Read the saved file as base64
+      const file = await Filesystem.readFile({
+        path: photo.fileName,
+        directory: Directory.Data,
+      });
+
+      // Convert base64 to Blob for FormData
+      const blob = base64ToBlob(file.data.toString());
+
+      const formData = new FormData();
+      formData.append('file', blob, photo.fileName);
+
+      const response = await fetch('http://localhost:3000/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      console.log('Upload response:', await response.text());
+
+      // Delete the local file after upload
+      await Filesystem.deleteFile({
+        path: photo.fileName,
+        directory: Directory.Data,
+      });
+    }
+
+    photos = [];
+    await savePhotosMetadata();
+  }
+
+  async function savePhotosMetadata() {
+    await Preferences.set({
+      key: 'photos',
+      value: JSON.stringify(photos),
+    });
+  }
+
+  async function loadPhotosMetadata() {
+    const result = await Preferences.get({ key: 'photos' });
+    photos = result.value ? JSON.parse(result.value) : [];
+  }
+
+  function blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = () => {
+        const base64 = reader.result?.toString().split(',')[1];
+        resolve(base64 || '');
+      };
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  function base64ToBlob(base64: string): Blob {
+    const byteString = atob(base64);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const intArray = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      intArray[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([intArray], { type: 'image/jpeg' });
+  }
+</script>
+
+<div class="space-y-4">
+  <button onclick={takePhoto}>📷 Take Photo</button>
+  <button onclick={pickPhoto}>🖼️ Pick From Gallery</button>
+
+  {#if photos.length > 0}
+    <h3>Pending Photos:</h3>
+    <div class="grid grid-cols-3 gap-4">
+      {#each photos as photo (photo.fileName)}
+        <div class="border p-2">
+          <img src={photo.webviewPath} alt="preview" style="max-width: 100%;" />
+          <p class="break-all text-xs">{photo.fileName}</p>
+          <button onclick={() => removePhoto(photo.fileName)}>❌ Remove</button>
+        </div>
+      {/each}
+    </div>
+
+    <button onclick={uploadAll} class="mt-4 bg-green-500 text-white p-2">
+      Upload All
+    </button>
+  {/if}
+</div>
