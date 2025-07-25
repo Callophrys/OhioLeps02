@@ -95,4 +95,7 @@ async function handleEdit(id) {
   stuff here
 </div>
 
+<a href="/">Home</a>
+<a href="/test1">Voice</a>
+<a href="/test2">Camera</a>
 <DarkToggle/>
