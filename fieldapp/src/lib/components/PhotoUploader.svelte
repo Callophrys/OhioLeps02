@@ -105,10 +105,9 @@
 
       const md = metadata[photo.fileName];
       if (md) {
-        console.log('_____md_____', md);
         formData.append('fileName', md.fileName);
         formData.append('subject', md.subject);
-        formData.append('user', md.userid);
+        formData.append('userid', md.userid);
         formData.append('source', md.source);
         formData.append('timestamp', md.timestamp);
         formData.append('timeseconds', md.timeseconds);
@@ -119,7 +118,7 @@
         body: formData,
       });
 
-      console.log('Upload response:', await response.text());
+      // console.log('Upload response:', await response.text());
 
       // Delete the local file after upload
       await Filesystem.deleteFile({
@@ -137,7 +136,7 @@
     return {
       'fileName': fileName,
       'subject': subject(),
-      'user': userid(),
+      'userid': userid(),
       'source': source,
       'timestamp': new Date(seconds).toISOString(),
       'timeseconds': seconds,
@@ -216,6 +215,7 @@
     return userids[idx];
   }
 
+  // TODO: consider network monitor to upload immediately if network is up and auto upload allowed and if site or user is allowed.
 </script>
 
 <div class="space-y-4">

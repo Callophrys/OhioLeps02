@@ -9,7 +9,7 @@
     updateRecord
   } from '$lib/db';
   import { startListening } from '$lib/voice';
-  import DarkToggle from '$lib/components/DarkToggle.svelte';
+  import Navigation from '$lib/components/Navigation.svelte';
   import RecordsManager from '$lib/components/RecordsManager.svelte';
 
   let newText = '';
@@ -64,6 +64,8 @@
   }
 </script>
 
+<Navigation />
+
 <div class="max-w-lg mx-auto p-4">
   <button
     onclick={handleVoice}
@@ -86,8 +88,3 @@
   <p>Latest recognized: {recognizedText}</p>
   
 </div>
-
-<a href="/">Home</a>
-<a href="/test1">Voice</a>
-<a href="/test2">Camera</a>
-<DarkToggle />

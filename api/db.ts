@@ -18,6 +18,7 @@ export function initDb() {
 
 // Insert a record
 export function insertRecord({ text, count }: RecordInput) {
+  console.log('api:insertRecord', text, count);
   const stmt = db.prepare(
     'INSERT INTO records (text, count, syncedAt) VALUES (?, ?, ?)'
   );
